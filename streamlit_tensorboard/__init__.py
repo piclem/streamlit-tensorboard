@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 
-def st_tensorboard(logdir="/logs/", port=6006, host='localhost', width=None, height=800, scrolling=True):
+def st_tensorboard(logdir="/logs/", port=6006, port_html=None, host='localhost', suffix='', width=None, height=800, scrolling=True):
     """Embed Tensorboard within a Streamlit app
     Parameters
     ----------
@@ -18,6 +18,12 @@ def st_tensorboard(logdir="/logs/", port=6006, host='localhost', width=None, hei
         Defaults to /logs/
     port: int
         Port to serve TensorBoard on. Defaults to 6006
+    port_html: int
+        Port to use for proxy URL. If None, uses argument port. Defaults to None
+    host: str
+        Host to use. Defaults to localhost
+    suffix: str
+        Optional suffix if URL is rewritten. Defaults to ''
     width: int
         The width of the frame in CSS pixels. Defaults to the report’s default element width.
     height: int
@@ -61,10 +67,11 @@ def st_tensorboard(logdir="/logs/", port=6006, host='localhost', width=None, hei
         port = start_result.info.port
         print(f"Reusing TensorBoard on port {port}")
 
-    proxy_url = "http://%HOST%:%PORT%"
-
+    proxy_url = "http://%HOST%:%PORT%/%SUFFIX%"
+    port_html = port if port_html is None else port_html
     proxy_url = proxy_url.replace("%PORT%", "%d" % port)
     proxy_url = proxy_url.replace("%HOST%", host)
+    proxy_url = proxy_url.replace("%SUFFIX%", suffix)
     replacements = [
         ("%HTML_ID%", html.escape(frame_id, quote=True)),
         ("%JSON_ID%", json.dumps(frame_id)),
