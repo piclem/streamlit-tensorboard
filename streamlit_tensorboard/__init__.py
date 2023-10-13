@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 
-def st_tensorboard(logdir="/logs/", port=6006, width=None, height=800, scrolling=True):
+def st_tensorboard(logdir="/logs/", port=6006, host='localhost', width=None, height=800, scrolling=True):
     """Embed Tensorboard within a Streamlit app
     Parameters
     ----------
@@ -61,9 +61,10 @@ def st_tensorboard(logdir="/logs/", port=6006, width=None, height=800, scrolling
         port = start_result.info.port
         print(f"Reusing TensorBoard on port {port}")
 
-    proxy_url = "http://localhost:%PORT%"
+    proxy_url = "http://%HOST%:%PORT%"
 
     proxy_url = proxy_url.replace("%PORT%", "%d" % port)
+    proxy_url = proxy_url.replace("%HOST%", host)
     replacements = [
         ("%HTML_ID%", html.escape(frame_id, quote=True)),
         ("%JSON_ID%", json.dumps(frame_id)),
