@@ -69,7 +69,7 @@ def st_tensorboard(logdir="/logs/", port=6006, port_html=None, host='localhost',
 
     proxy_url = "http://%HOST%:%PORT%/%SUFFIX%"
     port_html = port if port_html is None else port_html
-    proxy_url = proxy_url.replace("%PORT%", "%d" % port)
+    proxy_url = proxy_url.replace("%PORT%", "%d" % port_html)
     proxy_url = proxy_url.replace("%HOST%", host)
     proxy_url = proxy_url.replace("%SUFFIX%", suffix)
     replacements = [
